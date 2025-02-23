@@ -1,0 +1,73 @@
+# Services
+services:
+
+  # Nginx Service
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    ports:
+      - 8080:80
+    restart: always
+    environment:
+      - TZ=America/Edmonton
+    links:
+      - php
+    volumes:
+      - ./www/html/:/var/www/html/
+      - ./nginx/conf/:/etc/nginx/conf.d/
+      - ./nginx/logs/:/var/log/nginx/
+    depends_on:
+      - php
+      - pgsdb
+    networks:
+      - lemp-pgs-net
+
+  # PHP-FPM Service
+  php:
+    container_name: php8
+    build: php
+    expose:
+      - 9000
+    restart: always
+    environment:
+      - TZ=America/Edmonton
+    volumes:
+      - ./www/html/:/var/www/html/
+      - ./php/conf/php-log.conf:/usr/local/etc/php-fpm.d/zz-log.conf
+      - ./php/conf/php.ini:/usr/local/etc/php/conf.d/php.ini
+      #- ./php/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+    depends_on:
+      - pgsdb
+    networks:
+      - lemp-pgs-net
+
+  # PostgreSQL Service
+  pgsdb:
+    container_name: pgsdb
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    restart: always
+    env_file:
+      - ./db/env/pgsql.env
+    volumes:
+      - ./db/init/:/docker-entrypoint-initdb.d/
+      - ./db/data:/var/lib/pgsql/data
+    networks:
+      - lemp-pgs-net
+
+  # ADminer Service
+  adminer:
+    container_name: adminer
+    image: adminer:latest
+    restart: always
+    ports:
+    - 8432:8080
+    depends_on:
+      - pgsdb
+    networks:
+      - lemp-pgs-net
+
+# Networks
+networks:
+  lemp-pgs-net:
