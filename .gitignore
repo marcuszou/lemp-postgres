@@ -1,0 +1,2 @@
+db/env/pgsql.env
+nginx/logs/*.log

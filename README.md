@@ -50,7 +50,7 @@ This is a wrap-up of what I have accomplished grabbing in the PostgreSQL databas
 * This repo provides containers with Tech Stack:
     * __Linux__: Debian/Ubuntu is preferred, but it shouldn't matter much as far as you have a Docker Engine/Desktop installed
     * __Nginx__: latest (could select nginx: alpine for a smaller sized container)
-    * __PostgreSQL__: latest (latest version = 17.4 currently?)
+    * __PostgreSQL__: latest (latest version = 17.4 currently)
     * __PHP__: 8.2-FPM (customized with quite a bunch of PHP extensions)
 * Code in the `www` directory will be mapped into the Nginx container at `/var/www/html`
 * Nginx will grab code from the `www` directory.
@@ -62,12 +62,10 @@ This is a wrap-up of what I have accomplished grabbing in the PostgreSQL databas
 
 ## Future Implementation: local SSL
 
-* There are default passwords for MariaDB's `root` user and `zenusr` user specified in `docker/docker-compose.yml` or `./db/env/mysql.env`.
-* You are strongly recommended to edit this `./db/env/mysql.env` to replace the passwords as needed.
-
-* This docker configuration has not been security consolidated (with ssl). Expose it to public networks at your own risk!
-* If you place the containers in the Cloud Service Providers (AWS, GCP, Azure, Digital Ocean, etc.), the SSL question will be taken care by them automatically.
-* If you place them in a home NAS, you could manage the SSL with Nginx Proxy Manager via Let's Encrypt service.
+* There are default passwords for PostgreSQL's user `zenusr` user specified in `docker/docker-compose.yml` or `./db/env/pgsql.env`.
+* You are strongly recommended to edit this `./db/env/pgsql.env` to replace the passwords as needed.
+* This docker configuration has not been security consolidated (with SSL). Expose it to public networks at your own risk!
+* If you place the containers in the Cloud Service Providers (AWS, GCP, Azure, Digital Ocean, etc.) or a Home NAS, the SSL issue will be taken care by them automatically.
 
 
 
